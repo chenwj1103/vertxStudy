@@ -1,0 +1,13 @@
+*.class
+*.iml
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+#idea
+.vertx/
+.idea/
+/target/
+src/test

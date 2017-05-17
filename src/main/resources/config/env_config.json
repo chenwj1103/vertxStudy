@@ -1,0 +1,5 @@
+{
+  "port":"${port}",
+  "mongo.driver":"${mongo.driver}",
+  "env":"${env}"
+}
