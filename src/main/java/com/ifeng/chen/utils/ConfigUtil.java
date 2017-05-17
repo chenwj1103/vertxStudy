@@ -44,9 +44,9 @@ public class ConfigUtil {
      * @param key
      * @return
      */
-    public static Integer getInteger(String fileName,String key){
-        JsonObject config=configMap.get(fileName);
-        return  config.getInteger(key);
+    public static Integer getInteger(String fileName, String key) {
+        JsonObject config = configMap.get(fileName);
+        return config.getInteger(key);
     }
 
 
