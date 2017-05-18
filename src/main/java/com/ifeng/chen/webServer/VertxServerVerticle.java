@@ -37,8 +37,12 @@ public class VertxServerVerticle extends AbstractVerticle {
     private void route(Router router) {
         //基础路由
         basicRoute(router);
+
         //api路由
         apiRoute(router);
+
+        //测试路由
+        testRoute(router);
 
     }
 
@@ -60,18 +64,48 @@ public class VertxServerVerticle extends AbstractVerticle {
 
         //通用路由
         router.route().handler(BaseHandler::handAll);
+    }
+
+
+    private void apiRoute(Router router){
+
+        // api设置请求头
+        router.route("/sapi/*").handler(BaseHandler::handApi);
+
+        contentRoute(router);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private void contentRoute(Router router){
+
+
+
+
+
 
     }
 
 
 
-    private void apiRoute(Router router) {
+
+    //测试路由
+    private void testRoute(Router router) {
         router.route("/hello").handler(routingContext -> {
             HttpServerResponse response = routingContext.response();
             response.putHeader("content-type", "text/plain");
             response.end("hello world from Vertx-Web");
         });
-
     }
 
 

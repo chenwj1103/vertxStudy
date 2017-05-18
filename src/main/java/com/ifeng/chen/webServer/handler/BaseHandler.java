@@ -28,12 +28,12 @@ public class BaseHandler {
         //设置响应
         HttpServerResponse response=routingContext.response();
         response.setChunked(true);
-        handNext(routingContext);
+        rountNext(routingContext);
     }
 
 
 
-    private static void handNext(RoutingContext routingContext){
+    private static void rountNext(RoutingContext routingContext){
 
         try {
             Map<String,String> params= ServerUtil.getParams(routingContext.request().params());
