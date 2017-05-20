@@ -1,9 +1,7 @@
 package com.ifeng.chen.webServer;
 
-import com.ifeng.chen.utils.EnvConfigUtils;
-
-import com.ifeng.chen.webServer.handler.*;
-
+import com.ifeng.chen.webServer.handler.UserHandler;
+import com.ifeng.chen.webServer.handler.base.BaseHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpServerResponse;
@@ -26,7 +24,7 @@ public class VertxServerVerticle extends AbstractVerticle {
     public void start(Future<Void> startFuture) throws Exception {
 
 
-        Integer port = 8081;//Integer.parseInt(EnvConfigUtils.getString("port"));
+        Integer port = 8081;//Integer.parseInt(EnvConfigUtil.getString("port"));
         Router router = Router.router(vertx);
         route(router);
         vertx.createHttpServer().requestHandler(router::accept).listen(port);
@@ -47,11 +45,10 @@ public class VertxServerVerticle extends AbstractVerticle {
     }
 
 
-
     private void basicRoute(Router router) {
 
         //心跳
-        router.route("/heartbeat").handler(ctx-> ctx.response().setStatusCode(200).end());
+        router.route("/heartbeat").handler(ctx -> ctx.response().setStatusCode(200).end());
 
         //5秒超时
         router.route().handler(TimeoutHandler.create(5000));
@@ -67,36 +64,23 @@ public class VertxServerVerticle extends AbstractVerticle {
     }
 
 
-    private void apiRoute(Router router){
+    private void apiRoute(Router router) {
 
         // api设置请求头
         router.route("/sapi/*").handler(BaseHandler::handApi);
 
-        contentRoute(router);
+        usersRoute(router);
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-    private void contentRoute(Router router){
-
-
-
-
-
+    /**
+     * 查找用户信息相关路由
+     * @param router
+     */
+    private void usersRoute(Router router) {
+        router.route("/user/find").handler(UserHandler::findUser);
 
     }
-
-
 
 
     //测试路由
@@ -107,7 +91,6 @@ public class VertxServerVerticle extends AbstractVerticle {
             response.end("hello world from Vertx-Web");
         });
     }
-
 
 
 }

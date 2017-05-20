@@ -1,6 +1,6 @@
 package com.ifeng.chen;
 
-import com.ifeng.chen.utils.EnvConfigUtils;
+import com.ifeng.chen.utils.EnvConfigUtil;
 import com.ifeng.chen.webServer.VertxServerVerticle;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.VertxOptions;
@@ -17,7 +17,7 @@ public class Main {
         VertxOptions options = new VertxOptions();
 
         DeploymentOptions deploymentOptions = null;
-        String env = EnvConfigUtils.getString("env");
+        String env = EnvConfigUtil.getString("env");
         if ("test".equals(env)) {
             deploymentOptions = new DeploymentOptions();
             int core = Runtime.getRuntime().availableProcessors();

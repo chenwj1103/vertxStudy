@@ -1,5 +1,6 @@
 package com.ifeng.chen;
 
+import com.ifeng.chen.utils.VertxConstant;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
@@ -19,6 +20,7 @@ public class Runner {
             vertxOptions = new VertxOptions();
         }
         Consumer<Vertx> runner = vertx -> {
+            VertxConstant.vertxStatic=vertx;
             try {
                 if (deploymentOptions != null) {
                     vertx.deployVerticle(verticleId, deploymentOptions);
@@ -52,6 +54,7 @@ public class Runner {
         }
 
         Consumer<Vertx> runner = vertx -> {
+            VertxConstant.vertxStatic=vertx;
             try {
                 for(String verticleID : verticleIDs){
                     if (deploymentOptions != null) {

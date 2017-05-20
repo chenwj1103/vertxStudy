@@ -1,4 +1,4 @@
-package com.ifeng.chen.webServer.handler;
+package com.ifeng.chen.webServer.handler.base;
 
 import com.ifeng.chen.bean.DO.FailedResult;
 import com.ifeng.chen.bean.DO.SuccessResult;

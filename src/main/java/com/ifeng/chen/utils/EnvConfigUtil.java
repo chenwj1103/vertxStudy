@@ -3,7 +3,7 @@ package com.ifeng.chen.utils;
 /**
  * Created by Chen Weijie on 2017/5/14.
  */
-public class EnvConfigUtils {
+public class EnvConfigUtil {
 
 
     private static String fileName= "config/env_config.json";

@@ -1,4 +1,4 @@
-package com.ifeng.chen.dao;
+package com.ifeng.chen.dao.base;
 
 import com.ifeng.chen.annotations.DaoImpl;
 import org.apache.logging.log4j.LogManager;
@@ -25,7 +25,7 @@ public class DaoFactory {
     private DaoFactory(){}
 
 
-    private static <T> T getDao(String name, Class<T> clazz) {
+    public static <T> T getDao(String name, Class<T> clazz) {
         try {
             Objects.requireNonNull(name, "name cannot be empty");
             Object dao = DAOS_MAP.get(name);

@@ -14,9 +14,9 @@ import java.util.Map;
 public class ConfigUtil {
 
 
-    private static final Logger LOGGER= LogManager.getLogger(ConfigUtil.class);
+    private static final Logger LOGGER = LogManager.getLogger(ConfigUtil.class);
 
-    private static HashMap<String,JsonObject> configMap=new HashMap<String, JsonObject>();
+    private static HashMap<String, JsonObject> configMap = new HashMap<String, JsonObject>();
 
 
     //加载默认配置
@@ -29,17 +29,19 @@ public class ConfigUtil {
 
     /**
      * 获取配置文件中的配置
+     *
      * @param fileName
      * @param key
      * @return
      */
-    public static String getString(String fileName,String key){
-        JsonObject config=configMap.get(fileName);
+    public static String getString(String fileName, String key) {
+        JsonObject config = configMap.get(fileName);
         return config.getString(key);
     }
 
     /**
      * 获取配置文件中的配置
+     *
      * @param fileName
      * @param key
      * @return
@@ -52,18 +54,16 @@ public class ConfigUtil {
 
     /**
      * 获取配置文件中的配置
+     *
      * @param fileName
      * @param key
      * @return
      */
-    public static Boolean getBoolean(String fileName,String key){
+    public static Boolean getBoolean(String fileName, String key) {
 
-        JsonObject config=configMap.get(fileName);
+        JsonObject config = configMap.get(fileName);
         return config.getBoolean(key);
     }
-
-
-
 
 
     private static void initConfigFile(String fileName) {
@@ -80,8 +80,6 @@ public class ConfigUtil {
             LOGGER.info("加载" + fileName + "失败", e);
         }
     }
-
-
 
 
 }

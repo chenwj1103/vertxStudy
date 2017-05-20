@@ -1,4 +1,4 @@
-package com.ifeng.chen.service;
+package com.ifeng.chen.service.base;
 
 import com.ifeng.chen.annotations.ServiceImpl;
 import org.apache.logging.log4j.LogManager;
