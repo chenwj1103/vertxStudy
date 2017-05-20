@@ -51,8 +51,10 @@ public class DaoFactory {
             DaoImpl daoImpl = clazz.getAnnotation(DaoImpl.class);
             if (Objects.nonNull(daoImpl)) {
                 String key = daoImpl.value();
-                if (Objects.equals(key, name)) ;
-                return clazz;
+                if (Objects.equals(key, name)) {
+                    return clazz;
+                }
+                break;
             }
         }
         return null;

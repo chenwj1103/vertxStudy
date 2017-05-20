@@ -1,6 +1,6 @@
 package com.ifeng.chen.webServer.handler;
 
-import com.ifeng.chen.bean.DO.ErrorResult;
+import com.ifeng.chen.bean.DO.FailedResult;
 import com.ifeng.chen.bean.DO.SuccessResult;
 import com.ifeng.chen.bean.constant.StatusCodeEnum;
 
@@ -33,14 +33,14 @@ public abstract class ResponseHandler {
      * @param msg
      * @return
      */
-    public static ErrorResult errorResult(Object data, StatusCodeEnum statusCodeEnum, String msg) {
+    public static FailedResult errorResult(Object data, StatusCodeEnum statusCodeEnum, String msg) {
 
-        ErrorResult errorResult = new ErrorResult();
-        errorResult.setSuccess(false);
-        errorResult.setData(data);
-        errorResult.setCode(statusCodeEnum.getCode());
-        errorResult.setMsg(msg);
-        return errorResult;
+        FailedResult failedResult = new FailedResult();
+        failedResult.setSuccess(false);
+        failedResult.setData(data);
+        failedResult.setCode(statusCodeEnum.getCode());
+        failedResult.setMsg(msg);
+        return failedResult;
     }
 
 }

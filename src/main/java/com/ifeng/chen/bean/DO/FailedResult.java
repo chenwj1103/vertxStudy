@@ -3,7 +3,7 @@ package com.ifeng.chen.bean.DO;
 /**
  * Created by Chen Weijie on 2017/5/18.
  */
-public class ErrorResult {
+public class FailedResult {
 
 
     //是否返回成功

@@ -5,7 +5,7 @@ package com.ifeng.chen.bean.constant;
  */
 public enum StatusCodeEnum {
 
-    SUCESS_CODE("成功", 1),
+    SUCCESS_CODE("成功", 1),
     FAILED_CODE("失败", 0),
     TIMEOUT_CODE("响应超时", 2);
 
