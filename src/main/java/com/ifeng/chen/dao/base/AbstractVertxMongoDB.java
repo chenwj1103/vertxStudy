@@ -30,9 +30,13 @@ public abstract class AbstractVertxMongoDB {
     public Future<JsonObject> findOne(JsonObject query) {
 
         Future<JsonObject> future = Future.future();
+        System.out.println("getCollection()==="+getCollection());
+        System.out.println("query()==="+query);
         mongoClient.findOne(getCollection(), query, new JsonObject(), result -> {
             if (result.succeeded()) {
-                future.complete(result.result());
+                JsonObject jsonObject=result.result();
+                System.out.println("jsonObject()==="+jsonObject);
+                future.complete(jsonObject);
             } else {
                 future.fail(result.cause());
             }
@@ -51,6 +55,7 @@ public abstract class AbstractVertxMongoDB {
         Future<String> future = Future.future();
         mongoClient.insert(getCollection(), json, result -> {
             if (result.succeeded()) {
+                System.out.println("json============"+json);
                 future.complete(result.result());
             } else {
                 future.fail(result.cause());

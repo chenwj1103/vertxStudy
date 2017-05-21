@@ -28,4 +28,18 @@ public class UserServiceImpl implements UserService {
         }
         return future;
     }
+
+    @Override
+    public Future<String> insert(UserEntity userEntity) {
+        UserDao userDao = DaoFactory.getDao("userDao", UserDao.class);
+        Future<String> future = Future.future();
+        try {
+            Objects.requireNonNull(userDao, "userDao require not null");
+            Objects.requireNonNull(userEntity, "userEntity require not null");
+            userDao.insert(userEntity).compose(future::complete,future);
+        } catch (Exception e) {
+            future.fail(e);
+        }
+        return future;
+    }
 }

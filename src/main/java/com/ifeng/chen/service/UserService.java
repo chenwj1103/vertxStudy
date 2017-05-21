@@ -16,4 +16,13 @@ public interface UserService {
      */
     Future<UserEntity> find(String id);
 
+
+    /**
+     * 插入用户信息
+     *
+     * @param userEntity
+     * @return
+     */
+    Future<String> insert(UserEntity userEntity);
+
 }

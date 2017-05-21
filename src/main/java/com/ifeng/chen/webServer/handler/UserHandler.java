@@ -4,10 +4,12 @@ import com.ifeng.chen.bean.constant.StatusCodeEnum;
 import com.ifeng.chen.bean.entity.UserEntity;
 import com.ifeng.chen.service.UserService;
 import com.ifeng.chen.service.base.ServiceFactory;
+import com.ifeng.chen.utils.JackSonUtil;
 import com.ifeng.chen.utils.ServerUtil;
 import com.ifeng.chen.webServer.handler.base.ResponseHandler;
 import io.vertx.ext.web.RoutingContext;
 
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -23,10 +25,11 @@ public class UserHandler extends ResponseHandler {
     public static void findUser(RoutingContext routingContext) {
         Map<String, String> params = routingContext.get("params");
         String id = params.get("id");
-        UserService userService = ServiceFactory.getService("userSerice", UserService.class);
+        UserService userService = ServiceFactory.getService("userService", UserService.class);
         userService.find(id).setHandler(result -> {
             if (result.succeeded()) {
                 UserEntity userEntity = result.result();
+                System.out.println("user=="+ JackSonUtil.bean2Json(userEntity));
                 routingContext.put("user", successResult(userEntity, StatusCodeEnum.SUCCESS_CODE));
             } else {
                 routingContext.put("errorMsg", errorResult(null, StatusCodeEnum.FAILED_CODE, result.cause().getMessage()));
@@ -34,6 +37,31 @@ public class UserHandler extends ResponseHandler {
             ServerUtil.render(routingContext, "templates/user.ftl");
         });
     }
+
+
+
+    public static void insertUser(RoutingContext routingContext) {
+        UserEntity userEntity=new UserEntity();
+        userEntity.setAddress("北京市-立水桥");
+        userEntity.setAge(25);
+        userEntity.setBirthday(new Date());
+        userEntity.setCreateTime(new Date());
+        userEntity.setName("zhu NingNing");
+        userEntity.setPhone("18515689031");
+
+        UserService userService = ServiceFactory.getService("userService", UserService.class);
+        userService.insert(userEntity).setHandler(result -> {
+            if (result.succeeded()) {
+                System.out.println("res==="+result.result());
+                routingContext.put("user", successResult(null, StatusCodeEnum.SUCCESS_CODE));
+            } else {
+                routingContext.put("errorMsg", errorResult(null, StatusCodeEnum.FAILED_CODE, result.cause().getMessage()));
+            }
+            ServerUtil.render(routingContext, "templates/user.ftl");
+        });
+    }
+
+
 
 
 }

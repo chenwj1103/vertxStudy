@@ -153,7 +153,7 @@
             <properties>
                 <port>8081</port>
                 <env>prod</env>
-                <mongoDB.driverr>mongodb://127.0.0.1:27017/vertxStudy?maxPoolSize=1000readPreference=primaryPreferred</mongoDB.driverr>
+                <mongoDB.driver>mongodb://127.0.0.1:27017/vertxStudy?maxPoolSize=1000readPreference=primaryPreferred</mongoDB.driver>
             </properties>
         </profile>
     </profiles>

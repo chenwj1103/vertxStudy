@@ -26,11 +26,11 @@ public class UserDaoInpl extends AbstractVertxMongoDB implements UserDao {
     @Override
     public Future<String> insert(UserEntity userEntity) {
 
-        Future<String> future=Future.future();
+        Future<String> future = Future.future();
         try {
-            Objects.requireNonNull(userEntity,"required userEntity not empty");
-            JsonObject bson= BsonUtil.bean2Bson(userEntity);
-            insertOne(bson).compose(future::complete,future);
+            Objects.requireNonNull(userEntity, "required userEntity not empty");
+            JsonObject bson = BsonUtil.bean2Bson(userEntity);
+            insertOne(bson).compose(future::complete, future);
         } catch (Exception e) {
             future.fail(e);
         }

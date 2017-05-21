@@ -4,7 +4,7 @@
         "success" : ${context.result.success?string('true','false')},
         <#if context.result.success>
             "data" : {
-                 "weMediaId": "${context.result.data.weMediaId!}",
+                 "id": "${context.result.data.weMediaId!}",
                  "eAccountId": ${context.result.data.eAccountId!},
                  "weMediaName":"${context.result.data.weMediaName!}",
                  "weMediaImg":"${context.result.data.weMediaImg!}",

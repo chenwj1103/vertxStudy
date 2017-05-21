@@ -26,35 +26,35 @@ public class DaoFactory {
 
 
     public static <T> T getDao(String name, Class<T> clazz) {
+        Object object = DAOS_MAP.get(name);
         try {
             Objects.requireNonNull(name, "name cannot be empty");
-            Object dao = DAOS_MAP.get(name);
-            if (Objects.isNull(dao)) {
+            if (Objects.isNull(object)) {
                 Class<?> aClass = findClass(name);
                 if (Objects.nonNull(aClass)) {
-                    dao = aClass.newInstance();
-                    DAOS_MAP.put(name, dao);
+                    object = aClass.newInstance();
+                    DAOS_MAP.put(name, object);
+                    LOGGER.info("create dao pojo success : {}", clazz.getName());
                 }
             }
-            return clazz.cast(dao);
         } catch (Exception e) {
             LOGGER.error(e);
-            return null;
         }
+        return clazz.cast(object);
     }
 
 
     private static Class<?> findClass(String name) {
         Reflections reflections = new Reflections("com.ifeng.chen.dao.impl");
-        Set<Class<?>> clazzs = reflections.getTypesAnnotatedWith(DaoImpl.class);
-        for (Class<?> clazz : clazzs) {
+        Set<Class<?>> classSet = reflections.getTypesAnnotatedWith(DaoImpl.class);
+        for (Class<?> clazz : classSet) {
             DaoImpl daoImpl = clazz.getAnnotation(DaoImpl.class);
             if (Objects.nonNull(daoImpl)) {
                 String key = daoImpl.value();
                 if (Objects.equals(key, name)) {
                     return clazz;
                 }
-                break;
+//                break;
             }
         }
         return null;

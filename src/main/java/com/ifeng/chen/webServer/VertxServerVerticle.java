@@ -24,7 +24,7 @@ public class VertxServerVerticle extends AbstractVerticle {
     public void start(Future<Void> startFuture) throws Exception {
 
 
-        Integer port = 8081;//Integer.parseInt(EnvConfigUtil.getString("port"));
+        Integer port = 8080;//Integer.parseInt(EnvConfigUtil.getString("port"));
         Router router = Router.router(vertx);
         route(router);
         vertx.createHttpServer().requestHandler(router::accept).listen(port);
@@ -78,7 +78,12 @@ public class VertxServerVerticle extends AbstractVerticle {
      * @param router
      */
     private void usersRoute(Router router) {
+
+        //查找用户路由
         router.route("/user/find").handler(UserHandler::findUser);
+
+        //新增用户路由
+        router.route("/user/insert").handler(UserHandler::insertUser);
 
     }
 
