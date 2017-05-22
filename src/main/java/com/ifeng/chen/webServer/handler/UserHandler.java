@@ -8,6 +8,8 @@ import com.ifeng.chen.utils.JackSonUtil;
 import com.ifeng.chen.utils.ServerUtil;
 import com.ifeng.chen.webServer.handler.base.ResponseHandler;
 import io.vertx.ext.web.RoutingContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Date;
 import java.util.Map;
@@ -17,6 +19,7 @@ import java.util.Map;
  */
 public class UserHandler extends ResponseHandler {
 
+    private static final Logger LOGGER= LogManager.getLogger(UserHandler.class);
 
     /**
      * 查找用户信息
@@ -29,7 +32,7 @@ public class UserHandler extends ResponseHandler {
         userService.find(id).setHandler(result -> {
             if (result.succeeded()) {
                 UserEntity userEntity = result.result();
-                System.out.println("user=="+ JackSonUtil.bean2Json(userEntity));
+                LOGGER.info("user==============={}"+ JackSonUtil.bean2Json(userEntity));
                 routingContext.put("user", successResult(userEntity, StatusCodeEnum.SUCCESS_CODE));
             } else {
                 routingContext.put("errorMsg", errorResult(null, StatusCodeEnum.FAILED_CODE, result.cause().getMessage()));
@@ -39,15 +42,18 @@ public class UserHandler extends ResponseHandler {
     }
 
 
-
+    /**
+     * 插入用户信息
+     * @param routingContext
+     */
     public static void insertUser(RoutingContext routingContext) {
         UserEntity userEntity=new UserEntity();
         userEntity.setAddress("北京市-立水桥");
         userEntity.setAge(25);
-        userEntity.setBirthday(new Date());
-        userEntity.setCreateTime(new Date());
-        userEntity.setName("zhu NingNing");
-        userEntity.setPhone("18515689031");
+//        userEntity.setBirthday(new Date());
+//        userEntity.setCreateTime(new Date());
+        userEntity.setName("chenweijie");
+        userEntity.setPhone("15321939301");
 
         UserService userService = ServiceFactory.getService("userService", UserService.class);
         userService.insert(userEntity).setHandler(result -> {

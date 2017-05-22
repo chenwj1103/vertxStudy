@@ -8,7 +8,7 @@ public class CollectionName {
     /**
      * 账户集合
      */
-    public static final String WEMEDIA_ACCOUNT="weMedia_account";
+    public static final String WEMEDIA_ACCOUNT="wemedia_account";
 
     /**
      * 用户集合

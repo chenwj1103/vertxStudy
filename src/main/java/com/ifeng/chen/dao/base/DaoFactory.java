@@ -29,12 +29,12 @@ public class DaoFactory {
         Object object = DAOS_MAP.get(name);
         try {
             Objects.requireNonNull(name, "name cannot be empty");
+            Class<?> aClass = findClass(name);
             if (Objects.isNull(object)) {
-                Class<?> aClass = findClass(name);
                 if (Objects.nonNull(aClass)) {
                     object = aClass.newInstance();
                     DAOS_MAP.put(name, object);
-                    LOGGER.info("create dao pojo success : {}", clazz.getName());
+                    LOGGER.info("create dao pojo success : {}", aClass.getName());
                 }
             }
         } catch (Exception e) {

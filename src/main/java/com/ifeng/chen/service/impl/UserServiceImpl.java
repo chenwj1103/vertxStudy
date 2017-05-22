@@ -4,8 +4,11 @@ import com.ifeng.chen.annotations.ServiceImpl;
 import com.ifeng.chen.bean.entity.UserEntity;
 import com.ifeng.chen.dao.UserDao;
 import com.ifeng.chen.dao.base.DaoFactory;
+import com.ifeng.chen.dao.impl.UserDaoImpl;
 import com.ifeng.chen.service.UserService;
 import io.vertx.core.Future;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Objects;
 
@@ -14,6 +17,9 @@ import java.util.Objects;
  */
 @ServiceImpl("userService")
 public class UserServiceImpl implements UserService {
+
+
+    private static final Logger LOGGER = LogManager.getLogger(UserServiceImpl.class);
 
     @Override
     public Future<UserEntity> find(String id) {
@@ -24,6 +30,7 @@ public class UserServiceImpl implements UserService {
             Objects.requireNonNull(id, "id require not null");
             userDao.findOne(id).compose(future::complete, future);
         } catch (Exception e) {
+            LOGGER.error(e);
             future.fail(e);
         }
         return future;
@@ -38,6 +45,7 @@ public class UserServiceImpl implements UserService {
             Objects.requireNonNull(userEntity, "userEntity require not null");
             userDao.insert(userEntity).compose(future::complete,future);
         } catch (Exception e) {
+            LOGGER.error(e);
             future.fail(e);
         }
         return future;

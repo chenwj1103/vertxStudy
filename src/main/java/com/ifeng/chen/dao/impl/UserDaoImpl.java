@@ -10,7 +10,6 @@ import io.vertx.core.Future;
 import io.vertx.core.json.JsonObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.bson.types.ObjectId;
 
 import java.util.Objects;
 
@@ -18,24 +17,10 @@ import java.util.Objects;
  * Created by Chen Weijie on 2017/5/21.
  */
 @DaoImpl("userDao")
-public class UserDaoInpl extends AbstractVertxMongoDB implements UserDao {
+public class UserDaoImpl extends AbstractVertxMongoDB implements UserDao {
 
 
-    private static final Logger LOGGER = LogManager.getLogger(UserDaoInpl.class);
-
-    @Override
-    public Future<String> insert(UserEntity userEntity) {
-
-        Future<String> future = Future.future();
-        try {
-            Objects.requireNonNull(userEntity, "required userEntity not empty");
-            JsonObject bson = BsonUtil.bean2Bson(userEntity);
-            insertOne(bson).compose(future::complete, future);
-        } catch (Exception e) {
-            future.fail(e);
-        }
-        return future;
-    }
+    private static final Logger LOGGER = LogManager.getLogger(UserDaoImpl.class);
 
     @Override
     public Future<UserEntity> findOne(String id) {
@@ -62,6 +47,21 @@ public class UserDaoInpl extends AbstractVertxMongoDB implements UserDao {
             }, future);
         } catch (Exception e) {
             LOGGER.error("find userEntity failed", e);
+            future.fail(e);
+        }
+        return future;
+    }
+
+    @Override
+    public Future<String> insert(UserEntity userEntity) {
+
+        Future<String> future = Future.future();
+        try {
+            Objects.requireNonNull(userEntity, "required userEntity not empty");
+            JsonObject bson = BsonUtil.bean2Bson(userEntity);
+            insertOne(bson).compose(future::complete, future);
+        } catch (Exception e) {
+            LOGGER.info(e);
             future.fail(e);
         }
         return future;
