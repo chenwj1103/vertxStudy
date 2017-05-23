@@ -15,21 +15,24 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Created by Chen Weijie on 2017/5/20.
+ * Created by Chen Weijie on 2017/5/23.
  */
-public class BsonUtil {
+public class BsonUtils {
 
 
-    /**
-     * bean 2 Bson
-     *
-     * @param t
-     * @param escapeNull
-     * @param <T>
-     * @return
-     */
+    public static <T> List<JsonObject> list2Bson(List<T> list, boolean escapeNull) {
+        List<JsonObject> documents = new ArrayList<>();
+        for (T t : list) {
+            documents.add(bean2Bson(t, escapeNull));
+        }
+        return documents;
+    }
+
+    public static <T> JsonObject bean2Bson(T t) {
+        return bean2Bson(t, true);
+    }
+
     public static <T> JsonObject bean2Bson(T t, boolean escapeNull) {
-
         Objects.requireNonNull(t, "object cannot be null");
         Class<?> clazz = t.getClass();
         JsonObject bson = new JsonObject();
@@ -39,130 +42,51 @@ public class BsonUtil {
                 if (checkIgnore(field)) {
                     continue;
                 }
-
-                Class<?> fieldType = checkFieldType(field);
-                String name = field.getName();
+                Class<?> fieldType = checkFieldTypeWithBson(field);
+                String name = fieldName(field);
                 Object value = field.get(t);
                 if (escapeNull && Objects.isNull(value)) {
                     continue;
                 }
-                value = coverValue(value, clazz);
+                value = convertValue(value, fieldType);
                 bson.put(name, value);
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         }
+
         return bson;
     }
 
-
-    public static <T> JsonObject bean2Bson(T t) {
-        return bean2Bson(t, true);
-    }
-
-
-    public static <T> List<JsonObject> list2Bson(boolean escapeNull, List<T> tList) {
-        List<JsonObject> list = new ArrayList<>();
-        for (T t : tList) {
-            JsonObject jsonObject = bean2Bson(t, escapeNull);
-            list.add(jsonObject);
+    public static <T> List<T> bson2List(List<JsonObject> bsons, Class<T> clazz) throws Exception {
+        List<T> list = new ArrayList<>();
+        for (JsonObject bson : bsons) {
+            list.add(bson2Bean(bson, clazz));
         }
         return list;
     }
 
-
     public static <T> T bson2Bean(JsonObject bson, Class<T> clazz) throws Exception {
-
         Objects.requireNonNull(bson, "document cannot be null");
         Objects.requireNonNull(clazz, "class object cannot be null");
-
-        Object object = clazz.newInstance();
-
+        Object o = clazz.newInstance();
         for (Field field : fields(clazz)) {
             field.setAccessible(true);
-            if (checkIgnore(field)) {
+            if (checkIgnore(field))
                 continue;
-            }
-
-            Class<?> fieldType = checkFieldType(field);
+            /*字段类型*/
+            Class<?> fieldType = checkFieldTypeWithBson(field);
             String name = fieldName(field);
             Object value = bson.getValue(name);
             value = wrapValue(value, fieldType);
-
-            field.set(object, value);
+            field.set(o, value);
         }
 
-        object = Objects.requireNonNull(object);
-
-        return clazz.cast(object);
+        o = Objects.requireNonNull(o);
+        return clazz.cast(o);
     }
 
-    /**
-     * 获取bean对象的字段
-     *
-     * @param clazz
-     * @return
-     */
-    private static Field[] fields(Class<?> clazz) {
-        Objects.requireNonNull(clazz, "class object required not null");
-        return clazz.getDeclaredFields();
-    }
-
-
-    /**
-     * 是否可以忽略
-     *
-     * @param field
-     * @return
-     */
-    private static boolean checkIgnore(Field field) {
-        Objects.requireNonNull(field, "field require not null");
-        BsonIgnore ignore = field.getAnnotation(BsonIgnore.class);
-        return Objects.nonNull(ignore);
-
-    }
-
-    /**
-     * 获取字段名字
-     *
-     * @param field
-     * @return
-     */
-    private static String fieldName(Field field) {
-        String name = field.getName();
-        BsonProperty bsonProperty = field.getAnnotation(BsonProperty.class);
-        if (Objects.nonNull(bsonProperty)) {
-            name = bsonProperty.value();
-        }
-        return name;
-    }
-
-
-    /**
-     * 获取字段的类型
-     *
-     * @param field
-     * @return
-     */
-    private static Class<?> checkFieldType(Field field) {
-
-        Class<?> clazz = field.getType();
-        BsonType bsonType = field.getAnnotation(BsonType.class);
-        if (Objects.nonNull(bsonType)) {
-            BsonTypeEnum bsonTypeEnum = bsonType.value();
-            if (Objects.equals(bsonType, BsonTypeEnum.BSON_TYPE_ENUM)) {
-                clazz = ObjectId.class;
-            }
-        }
-        return clazz;
-    }
-
-    /**
-     * @param value
-     * @param clazz
-     * @return
-     */
-    private static Object coverValue(Object value, Class<?> clazz) {
+    private static Object convertValue(Object value, Class<?> clazz) {
         if (Objects.nonNull(value) && Objects.nonNull(clazz)) {
             if (Objects.equals(clazz, ObjectId.class)) {
                 value = new JsonObject().put("$oid", value);
@@ -174,7 +98,6 @@ public class BsonUtil {
         }
         return value;
     }
-
 
     private static Object wrapValue(Object value, Class<?> fieldType) {
         if (Objects.nonNull(value)) {
@@ -203,5 +126,37 @@ public class BsonUtil {
         return value;
     }
 
+    private static Class<?> checkFieldTypeWithBson(Field field) {
+        Class<?> clazz = field.getType();
+
+        /*bsonTyoe注解*/
+        BsonType bsonType = field.getAnnotation(BsonType.class);
+        if (Objects.nonNull(bsonType)) {
+            BsonTypeEnum type = bsonType.value();
+            if (Objects.equals(type, BsonTypeEnum.BSON_TYPE_ENUM)) {
+                clazz = ObjectId.class;
+            }
+        }
+        return clazz;
+    }
+
+    private static String fieldName(Field field) {
+        String name = field.getName();
+        BsonProperty property = field.getAnnotation(BsonProperty.class);
+        if (Objects.nonNull(property)) {
+            name = property.value();
+        }
+        return name;
+    }
+
+    private static boolean checkIgnore(Field field) {
+        BsonIgnore ignore = field.getAnnotation(BsonIgnore.class);
+        return Objects.nonNull(ignore);
+    }
+
+    private static Field[] fields(Class<?> clazz) {
+        Objects.requireNonNull(clazz, "class object cannot be null");
+        return clazz.getDeclaredFields();
+    }
 
 }

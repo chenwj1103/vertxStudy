@@ -164,8 +164,8 @@ public abstract class AbstractVertxMongoDB {
      * @param id
      * @throws Exception
      */
-    public void validateObjetId(String id) throws Exception {
-        Objects.requireNonNull(id, "validateObjetId id require not null");
+    public void validateObjectId(String id) throws Exception {
+        Objects.requireNonNull(id, "validateObjectId id require not null");
         new ObjectId(id);
     }
 

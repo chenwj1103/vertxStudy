@@ -4,6 +4,7 @@ import com.ifeng.chen.bean.constant.StatusCodeEnum;
 import com.ifeng.chen.bean.entity.UserEntity;
 import com.ifeng.chen.service.UserService;
 import com.ifeng.chen.service.base.ServiceFactory;
+import com.ifeng.chen.utils.DateUtil;
 import com.ifeng.chen.utils.JackSonUtil;
 import com.ifeng.chen.utils.ServerUtil;
 import com.ifeng.chen.webServer.handler.base.ResponseHandler;
@@ -12,7 +13,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by Chen Weijie on 2017/5/21.
@@ -32,8 +35,8 @@ public class UserHandler extends ResponseHandler {
         userService.find(id).setHandler(result -> {
             if (result.succeeded()) {
                 UserEntity userEntity = result.result();
-                LOGGER.info("user==============={}"+ JackSonUtil.bean2Json(userEntity));
-                routingContext.put("user", successResult(userEntity, StatusCodeEnum.SUCCESS_CODE));
+                LOGGER.info("user:{}",JackSonUtil.bean2Json(userEntity));
+                routingContext.put("result", successResult(userEntity, StatusCodeEnum.SUCCESS_CODE));
             } else {
                 routingContext.put("errorMsg", errorResult(null, StatusCodeEnum.FAILED_CODE, result.cause().getMessage()));
             }
@@ -44,26 +47,27 @@ public class UserHandler extends ResponseHandler {
 
     /**
      * 插入用户信息
+     *
      * @param routingContext
      */
     public static void insertUser(RoutingContext routingContext) {
-        UserEntity userEntity=new UserEntity();
+        UserEntity userEntity = new UserEntity();
         userEntity.setAddress("北京市-立水桥");
         userEntity.setAge(25);
-//        userEntity.setBirthday(new Date());
-//        userEntity.setCreateTime(new Date());
+        userEntity.setBirthday(new Date());
+        userEntity.setCreateTime(new Date());
         userEntity.setName("chenweijie");
         userEntity.setPhone("15321939301");
 
         UserService userService = ServiceFactory.getService("userService", UserService.class);
         userService.insert(userEntity).setHandler(result -> {
+            String response;
             if (result.succeeded()) {
-                System.out.println("res==="+result.result());
-                routingContext.put("user", successResult(null, StatusCodeEnum.SUCCESS_CODE));
+                response = "{\"success\":true}";
             } else {
-                routingContext.put("errorMsg", errorResult(null, StatusCodeEnum.FAILED_CODE, result.cause().getMessage()));
+                response = "{\"success\":false}";
             }
-            ServerUtil.render(routingContext, "templates/user.ftl");
+            routingContext.response().end(response);
         });
     }
 

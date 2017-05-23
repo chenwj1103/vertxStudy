@@ -6,6 +6,7 @@ import com.ifeng.chen.dao.UserDao;
 import com.ifeng.chen.dao.base.AbstractVertxMongoDB;
 import com.ifeng.chen.dao.constant.CollectionName;
 import com.ifeng.chen.utils.BsonUtil;
+import com.ifeng.chen.utils.BsonUtils;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonObject;
 import org.apache.logging.log4j.LogManager;
@@ -29,7 +30,7 @@ public class UserDaoImpl extends AbstractVertxMongoDB implements UserDao {
         try {
             Objects.requireNonNull(id, "required id not empty");
 
-            validateObjetId(id);
+            validateObjectId(id);
             JsonObject query = new JsonObject()
                     .put("_id", new JsonObject()
                             .put("$oid", id));
@@ -37,7 +38,8 @@ public class UserDaoImpl extends AbstractVertxMongoDB implements UserDao {
                 UserEntity userEntity = null;
                 try {
                     if (Objects.nonNull(document) && !document.isEmpty()) {
-                        userEntity = BsonUtil.bson2Bean(document, UserEntity.class);
+                        System.out.println("document==="+document);
+                        userEntity = BsonUtils.bson2Bean(document, UserEntity.class);
                     }
                     future.complete(userEntity);
                 } catch (Exception e) {
@@ -58,10 +60,10 @@ public class UserDaoImpl extends AbstractVertxMongoDB implements UserDao {
         Future<String> future = Future.future();
         try {
             Objects.requireNonNull(userEntity, "required userEntity not empty");
-            JsonObject bson = BsonUtil.bean2Bson(userEntity);
+            JsonObject bson = BsonUtils.bean2Bson(userEntity);
             insertOne(bson).compose(future::complete, future);
         } catch (Exception e) {
-            LOGGER.info(e);
+            LOGGER.error(e);
             future.fail(e);
         }
         return future;

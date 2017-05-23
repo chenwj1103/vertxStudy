@@ -4,11 +4,14 @@
         "success" : ${context.result.success?string('true','false')},
         <#if context.result.success>
             "data" : {
-                 "id": "${context.result.data.weMediaId!}",
-                 "eAccountId": ${context.result.data.eAccountId!},
-                 "weMediaName":"${context.result.data.weMediaName!}",
-                 "weMediaImg":"${context.result.data.weMediaImg!}",
-                 "systemOfflineReason":"${context.result.data.systemOfflineReason!}"
+                 "id": "${context.result.data.id!}",
+                 "name": "${context.result.data.name!}",
+                 "age": ${context.result.data.age!},
+                 "address":"${context.result.data.address!}",
+                 "phone":"${context.result.data.phone!}",
+                 "createTime":"${(context.result.data.createTime?string('yyyy-MM-dd HH:mm:ss'))!}",
+                 "updateTime":"${(context.result.data.updateTime?string('yyyy-MM-dd HH:mm:ss'))!}",
+                 "birthday":"${(context.result.data.birthday?string('yyyy-MM-dd HH:mm:ss'))!}"
                     }
         <#else>
             "errorMsg" : "${context.result.errorMsg!}"

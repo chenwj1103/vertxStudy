@@ -1,5 +1,6 @@
 package com.ifeng.chen.utils;
 
+import com.ifeng.chen.bean.constant.StatusCodeEnum;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -162,35 +163,6 @@ public class DateUtil {
         return str;
     }
 
-    //获取5分钟前的时间（Date）
-    public static Date getDateBefore(Integer time) {
-        Calendar beforeTime = Calendar.getInstance();
-        beforeTime.add(Calendar.MILLISECOND, -time);// 5分钟之前的时间
-        Date beforeD = beforeTime.getTime();
-        return beforeD;
-    }
-
-    /**
-     * 字符串转换成Mong格式的map
-     *
-     * @param dateTime(yyyy-MM-dd 的字符串时间)
-     * @return
-     */
-    public static Map<String, String> strToMongoTime(String dateTime) {
-        Map<String, String> mongoTime = new HashMap<>();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = null;
-        try {
-            date = simpleDateFormat.parse(dateTime);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        String str = getMongoTimeStr(date);
-        mongoTime.put("$date", str);
-
-        return mongoTime;
-    }
-
 
     /**
      * 计算两个日期之间相差的天数
@@ -348,20 +320,6 @@ public class DateUtil {
     public static String utcMatchFormat(String date) {
 
         Objects.requireNonNull(date);
-
-        for (UTCMatchFormat format : UTCMatchFormat.values()) {
-            String regex = format.getPattern();
-            if (date.matches(regex)) {
-                return format.getFormat();
-            }
-        }
-        return null;
-    }
-
-    public static String utcMatchFormatToDate(String date){
-
-        Objects.requireNonNull(date);
-
         for (UTCMatchFormat format : UTCMatchFormat.values()) {
             String regex = format.getPattern();
             if (date.matches(regex)) {
