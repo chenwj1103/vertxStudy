@@ -17,7 +17,7 @@ public class VertxMongoClient {
 
     private static final Logger LOGGER = LogManager.getLogger(VertxMongoClient.class);
 
-    private static final String mongoDBDriver = EnvConfigUtil.getString("mongo.driver");
+    private static final String mongoDBDriver = EnvConfigUtil.getString("mongoDB.driver");
 
     private static final String mongoDBPool = EnvConfigUtil.getString("mongo.poolname");
 
@@ -29,8 +29,8 @@ public class VertxMongoClient {
     public static MongoClient getVertxMongoClient() {
         if (Objects.isNull(vertxMongoClient)) {
             JsonObject config = new JsonObject()
-//                    .put("connection_string", mongoDBDriver)
-                    .put("connection_string","mongodb://127.0.0.1:27017/vertxStudy")
+                    .put("connection_string", mongoDBDriver)
+//                    .put("connection_string","mongodb://127.0.0.1:27017/vertxStudy")
                     .put("useObjectId", true);
             System.out.println("config===="+config);
             vertxMongoClient = MongoClient.createShared(VertxConstant.vertxStatic, config, mongoDBPool);

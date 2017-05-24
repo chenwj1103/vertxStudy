@@ -1,5 +1,6 @@
 package com.ifeng.chen.webServer;
 
+import com.ifeng.chen.utils.EnvConfigUtil;
 import com.ifeng.chen.webServer.handler.UserHandler;
 import com.ifeng.chen.webServer.handler.base.BaseHandler;
 import io.vertx.core.AbstractVerticle;
@@ -23,8 +24,7 @@ public class VertxServerVerticle extends AbstractVerticle {
     @Override
     public void start(Future<Void> startFuture) throws Exception {
 
-
-        Integer port = 8080;//Integer.parseInt(EnvConfigUtil.getString("port"));
+        Integer port = Integer.parseInt(EnvConfigUtil.getString("port"));
         Router router = Router.router(vertx);
         route(router);
         vertx.createHttpServer().requestHandler(router::accept).listen(port);

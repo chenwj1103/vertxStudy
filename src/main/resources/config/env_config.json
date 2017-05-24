@@ -1,6 +1,6 @@
 {
-  "port":"${port}",
-  "mongo.driver":"${mongoDB.driver}",
+  "port": "${port}",
+  "mongoDB.driver":"${mongoDB.driver}",
   "env":"${env}",
-  "mongo.poolname": "mongo.pool"
+  "mongo.poolname": "mongo.poolname"
 }

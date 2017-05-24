@@ -16,13 +16,11 @@ public class Main {
 
         VertxOptions options = new VertxOptions();
 
-        DeploymentOptions deploymentOptions = null;
+        DeploymentOptions deploymentOptions;
         String env = EnvConfigUtil.getString("env");
         if ("test".equals(env)) {
             deploymentOptions = new DeploymentOptions();
             int core = Runtime.getRuntime().availableProcessors();
-            int minCore = 16;
-            core = core - 6 > minCore ? core - 6 : minCore;
             deploymentOptions.setInstances(core);
         } else if ("prod".equals(env)) {
             deploymentOptions = new DeploymentOptions();
