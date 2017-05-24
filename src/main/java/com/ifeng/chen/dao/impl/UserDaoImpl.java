@@ -39,7 +39,7 @@ public class UserDaoImpl extends AbstractVertxMongoDB implements UserDao {
                 try {
                     if (Objects.nonNull(document) && !document.isEmpty()) {
                         System.out.println("document==="+document);
-                        userEntity = BsonUtils.bson2Bean(document, UserEntity.class);
+                        userEntity = BsonUtil.bson2Bean(document, UserEntity.class);
                     }
                     future.complete(userEntity);
                 } catch (Exception e) {
@@ -60,7 +60,7 @@ public class UserDaoImpl extends AbstractVertxMongoDB implements UserDao {
         Future<String> future = Future.future();
         try {
             Objects.requireNonNull(userEntity, "required userEntity not empty");
-            JsonObject bson = BsonUtils.bean2Bson(userEntity);
+            JsonObject bson = BsonUtil.bean2Bson(userEntity);
             insertOne(bson).compose(future::complete, future);
         } catch (Exception e) {
             LOGGER.error(e);

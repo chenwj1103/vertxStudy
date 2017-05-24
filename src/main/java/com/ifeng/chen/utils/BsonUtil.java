@@ -46,7 +46,7 @@ public class BsonUtil {
                 if (escapeNull && Objects.isNull(value)) {
                     continue;
                 }
-                value = coverValue(value, clazz);
+                value = coverValue(value, fieldType);
                 bson.put(name, value);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
@@ -150,7 +150,7 @@ public class BsonUtil {
         BsonType bsonType = field.getAnnotation(BsonType.class);
         if (Objects.nonNull(bsonType)) {
             BsonTypeEnum bsonTypeEnum = bsonType.value();
-            if (Objects.equals(bsonType, BsonTypeEnum.BSON_TYPE_ENUM)) {
+            if (Objects.equals(bsonTypeEnum, BsonTypeEnum.BSON_TYPE_ENUM)) {
                 clazz = ObjectId.class;
             }
         }
