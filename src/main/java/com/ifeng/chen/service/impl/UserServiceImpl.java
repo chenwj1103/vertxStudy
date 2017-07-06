@@ -6,6 +6,8 @@ import com.ifeng.chen.dao.UserDao;
 import com.ifeng.chen.dao.base.DaoFactory;
 import com.ifeng.chen.dao.impl.UserDaoImpl;
 import com.ifeng.chen.service.UserService;
+import com.ifeng.chen.utils.HttpClientUtils;
+import com.ifeng.chen.utils.VertxConstant;
 import io.vertx.core.Future;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -50,4 +52,24 @@ public class UserServiceImpl implements UserService {
         }
         return future;
     }
+
+
+    /**
+     * 发送http请求
+     * @param url
+     * @param timeout
+     * @return
+     */
+    public Future<String> sendGet(String url, int timeout) {
+        Future<String> future = Future.future();
+        HttpClientUtils.getInstance(VertxConstant.vertxStatic).setGet(url, timeout, response -> {
+            if (response.statusCode() == 200) {
+                response.bodyHandler(res -> future.complete(res.toString("utf-8")));
+            } else {
+                future.fail("response is not OK");
+            }
+        }, future::fail);
+        return future;
+    }
+
 }

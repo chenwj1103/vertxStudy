@@ -13,7 +13,6 @@ public class Main {
     public static void main(String args[]){
 
 
-
         VertxOptions options = new VertxOptions();
 
         DeploymentOptions deploymentOptions;
