@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- default vertx options-->
+    <bean id="vertxOptions"
+          class="io.vertx.core.VertxOptions">
+    </bean>
+
+    <!-- vertx entity-->
+    <bean id="vertx"
+          class="io.vertx.core.Vertx"
+          factory-method="vertx">
+        <constructor-arg ref="vertxOptions"/>
+    </bean>
+
+    <!-- spring verticle factory-->
+    <bean id="springVerticleFactory"
+          class="com.ifeng.fhhService.chen.SpringVerticleFactory">
+    </bean>
+
+    <!-- spring web verticle -->
+    <bean id="springWebVerticle"
+          class="com.ifeng.fhhService.chen.SpringWebVerticle"
+          scope="prototype">
+    </bean>
+
+
+
+</beans>

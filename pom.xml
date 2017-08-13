@@ -144,11 +144,57 @@
             <version>5.4.0-21</version>
         </dependency>
 
+        <!-- spring -->
+        <!-- spring boot -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>1.5.2.RELEASE</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>jul-to-slf4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>log4j-over-slf4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>jcl-over-slf4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- spring framework -->
+        <!-- spring framework 的版本要与spring-boot所依赖的framework版本一致 (重要)-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>4.3.7.RELEASE</version>
+        </dependency>
+
+
     </dependencies>
 
 
     <build>
         <plugins>
+            <!-- spring boot plugin-->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>1.5.2.RELEASE</version>
+            </plugin>
+
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.3</version>
